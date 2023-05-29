@@ -76,7 +76,12 @@ public class ClientRpcWorker implements Runnable, IServiceObserver {
 
     @Override
     public void updateLocuri() throws TeatruException {
-
+        Response resp = new Response.Builder().type(ResponseType.LOCS_UPDATE).build();
+        try {
+            sendResponse(resp);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -132,6 +137,56 @@ public class ClientRpcWorker implements Runnable, IServiceObserver {
             try {
                 List<Spectacol> spectacols = server.filtruDupaGen(gen, this);
                 return new Response.Builder().type(ResponseType.GOT_FILTRE_SPEC).data(spectacols).build();
+            }
+            catch (TeatruException e){
+                return new Response.Builder().type(ResponseType.ERROR).data(e.getMessage()).build();
+            }
+        }
+        if (request.type() == RequestType.DEL_SPEC) {
+            Integer id = (Integer) request.data();
+            try {
+                server.deleteSpectacol(id, this);
+                return okResponse;
+            }
+            catch (TeatruException e){
+                return new Response.Builder().type(ResponseType.ERROR).data(e.getMessage()).build();
+            }
+        }
+        if (request.type() == RequestType.UP_SPEC) {
+            SpectacolUpdateDTO spec = (SpectacolUpdateDTO) request.data();
+            try {
+                server.updateSpectacol(spec, this);
+                return okResponse;
+            }
+            catch (TeatruException e){
+                return new Response.Builder().type(ResponseType.ERROR).data(e.getMessage()).build();
+            }
+        }
+        if (request.type() == RequestType.FIND_LOCS) {
+            Spectacol spectacol = (Spectacol) request.data();
+            try {
+                var locs = server.getLocuriSpectacol(spectacol, this);
+                return new Response.Builder().type(ResponseType.GOT_LOCS).data(locs).build();
+            }
+            catch (TeatruException e){
+                return new Response.Builder().type(ResponseType.ERROR).data(e.getMessage()).build();
+            }
+        }
+        if (request.type() == RequestType.ADD_REZ) {
+            RezervareDTO rezervareDTO = (RezervareDTO) request.data();
+            try {
+                var code = server.addRezervare(rezervareDTO, this);
+                return new Response.Builder().type(ResponseType.REZ_ADDED).data(code).build();
+            }
+            catch (TeatruException e){
+                return new Response.Builder().type(ResponseType.ERROR).data(e.getMessage()).build();
+            }
+        }
+        if (request.type() == RequestType.DEL_REZ) {
+            Integer cod = (Integer) request.data();
+            try {
+                server.deleteRezervare(cod, this);
+                return okResponse;
             }
             catch (TeatruException e){
                 return new Response.Builder().type(ResponseType.ERROR).data(e.getMessage()).build();

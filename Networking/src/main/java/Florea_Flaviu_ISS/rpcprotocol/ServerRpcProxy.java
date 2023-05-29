@@ -96,6 +96,66 @@ public class ServerRpcProxy implements IService {
         }
     }
 
+    @Override
+    public void deleteSpectacol(Integer id, IServiceObserver client) throws TeatruException {
+        Request req = new Request.Builder().type(RequestType.DEL_SPEC).data(id).build();
+        sendRequest(req);
+        Response response = readResponse();
+        if(response.type() == ResponseType.ERROR) {
+            String err = response.data().toString();
+            throw new TeatruException(err);
+        }
+    }
+
+    @Override
+    public void updateSpectacol(SpectacolUpdateDTO spectacolDTO, IServiceObserver client) throws TeatruException {
+        Request req = new Request.Builder().type(RequestType.UP_SPEC).data(spectacolDTO).build();
+        sendRequest(req);
+        Response response = readResponse();
+        if(response.type() == ResponseType.ERROR) {
+            String err = response.data().toString();
+            throw new TeatruException(err);
+        }
+    }
+
+    @Override
+    public List<Loc> getLocuriSpectacol(Spectacol spectacol, IServiceObserver client) throws TeatruException {
+        Request req = new Request.Builder().type(RequestType.FIND_LOCS).data(spectacol).build();
+        sendRequest(req);
+        Response response = readResponse();
+        if(response.type() == ResponseType.ERROR) {
+            String err = response.data().toString();
+            throw new TeatruException(err);
+        }
+        this.client = client;
+        List<Loc> locuri = (List<Loc>) response.data();
+        return locuri;
+    }
+
+    @Override
+    public Integer addRezervare(RezervareDTO rezervareDTO, IServiceObserver client) throws TeatruException {
+        Request req = new Request.Builder().type(RequestType.ADD_REZ).data(rezervareDTO).build();
+        sendRequest(req);
+        Response response = readResponse();
+        if(response.type() == ResponseType.ERROR) {
+            String err = response.data().toString();
+            throw new TeatruException(err);
+        }
+        Integer code = (Integer) response.data();
+        return code;
+    }
+
+    @Override
+    public void deleteRezervare(Integer cod, IServiceObserver client) throws TeatruException {
+        Request req = new Request.Builder().type(RequestType.DEL_REZ).data(cod).build();
+        sendRequest(req);
+        Response response = readResponse();
+        if(response.type() == ResponseType.ERROR) {
+            String err = response.data().toString();
+            throw new TeatruException(err);
+        }
+    }
+
     private void closeConnection() {
         finished = true;
         try {
@@ -170,7 +230,7 @@ public class ServerRpcProxy implements IService {
 
     private boolean isUpdateLocuri(Response response){
 
-        return false;
+        return response.type() == ResponseType.LOCS_UPDATE;
     }
 
     private class ReaderThread implements Runnable{

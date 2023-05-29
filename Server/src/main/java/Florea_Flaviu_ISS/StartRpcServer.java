@@ -57,7 +57,10 @@ public class StartRpcServer {
         IManagerRepository managerRepository = new ManagerHibernateRepository(sessionFactory);
         IDateTimeRepository dateTimeRepository = new DateTimeHibernateRepository(sessionFactory);
         ISpectacolRepository spectacolRepository = new SpectacolHibernateRepository(sessionFactory);
-        IService contestService = new TeatruServiceImpl(managerRepository, dateTimeRepository, spectacolRepository);
+        ILocRepository locRepository = new LocHibernateRepository(sessionFactory);
+        ISpectatorRepository spectatorRepository = new SpectatorHibernateRepository(sessionFactory);
+        IRezervareRepository rezervareRepository = new RezervareHibernateRepository(sessionFactory);
+        IService contestService = new TeatruServiceImpl(managerRepository, dateTimeRepository, spectacolRepository, locRepository, spectatorRepository, rezervareRepository);
 
         int serverPort = defaultPort;
         try {

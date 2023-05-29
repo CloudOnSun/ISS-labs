@@ -15,4 +15,14 @@ public interface IService {
     public void addSpectacol(SpectacolDTO spectacolDTO, IServiceObserver client) throws TeatruException;
 
     public void logOut(Manager manager, IServiceObserver client) throws TeatruException;
+
+    public void deleteSpectacol(Integer id, IServiceObserver client) throws  TeatruException;
+
+    public void updateSpectacol(SpectacolUpdateDTO spectacolDTO, IServiceObserver client) throws  TeatruException;
+
+    public List<Loc> getLocuriSpectacol(Spectacol spectacol, IServiceObserver client) throws TeatruException;
+
+    public Integer addRezervare(RezervareDTO rezervareDTO, IServiceObserver client) throws TeatruException;
+
+    public void deleteRezervare(Integer cod, IServiceObserver client) throws TeatruException;
 }

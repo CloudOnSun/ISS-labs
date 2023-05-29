@@ -1,9 +1,6 @@
 package Florea_Flaviu_ISS.controllers;
 
-import Florea_Flaviu_ISS.domain.Genuri;
-import Florea_Flaviu_ISS.domain.Manager;
-import Florea_Flaviu_ISS.domain.SpectacolDTO;
-import Florea_Flaviu_ISS.domain.Teatru;
+import Florea_Flaviu_ISS.domain.*;
 import Florea_Flaviu_ISS.service.IService;
 import Florea_Flaviu_ISS.service.TeatruException;
 import javafx.event.ActionEvent;
@@ -12,6 +9,8 @@ import javafx.scene.control.*;
 
 public class ManagerPageController {
 
+    @FXML
+    private TextField idField;
     @FXML
     private TextField genField;
     @FXML
@@ -99,5 +98,51 @@ public class ManagerPageController {
 
     public void setTeatru(Teatru teatruGeneral) {
         this.teatru = teatruGeneral;
+    }
+
+    public void onStergeSpectacol(ActionEvent actionEvent) {
+        try {
+            Integer idSpectacol = Integer.parseInt(idField.getText());
+            try {
+                srv.deleteSpectacol(idSpectacol, firstPageController);
+            } catch (TeatruException ex) {
+                Alert alert = new Alert(Alert.AlertType.NONE, ex.getMessage(), ButtonType.OK);
+                alert.setTitle("ERROR");
+                alert.show();
+            }
+        } catch (NumberFormatException ex) {
+            Alert alert = new Alert(Alert.AlertType.NONE, "NU da string pentru int", ButtonType.OK);
+            alert.setTitle("ERROR");
+            alert.show();
+        }
+    }
+
+    public void onUpdateSpectacol(ActionEvent actionEvent) {
+        try {
+            Integer idSpectacol = Integer.parseInt(idField.getText());
+            String titlu = titluField.getText();
+            String regizor = regizorField.getText();
+            Integer zi = Integer.parseInt(ziField.getText());
+            Integer luna = Integer.parseInt(lunaField.getText());
+            Integer an = Integer.parseInt(anField.getText());
+            Integer ora = Integer.parseInt(oraField.getText());
+            Integer minut = Integer.parseInt(minutField.getText());
+            Genuri gen = Genuri.valueOf(genField.getText());
+
+            SpectacolUpdateDTO specDTO = new SpectacolUpdateDTO(
+                    idSpectacol, gen, regizor, titlu, an, luna, zi, ora, minut, manager, teatru
+            );
+            try {
+                srv.updateSpectacol(specDTO, firstPageController);
+            } catch (TeatruException ex) {
+                Alert alert = new Alert(Alert.AlertType.NONE, ex.getMessage(), ButtonType.OK);
+                alert.setTitle("ERROR");
+                alert.show();
+            }
+        } catch (NumberFormatException ex) {
+            Alert alert = new Alert(Alert.AlertType.NONE, "NU da string pentru int", ButtonType.OK);
+            alert.setTitle("ERROR");
+            alert.show();
+        }
     }
 }

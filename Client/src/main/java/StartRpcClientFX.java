@@ -1,6 +1,7 @@
 import Florea_Flaviu_ISS.controllers.FirstPageController;
 import Florea_Flaviu_ISS.controllers.LogInPageController;
 import Florea_Flaviu_ISS.controllers.ManagerPageController;
+import Florea_Flaviu_ISS.controllers.SpectacolController;
 import Florea_Flaviu_ISS.rpcprotocol.ServerRpcProxy;
 import Florea_Flaviu_ISS.service.IService;
 import javafx.application.Application;
@@ -76,11 +77,21 @@ public class StartRpcClientFX  extends Application {
                 loaderManagerPage.<ManagerPageController>getController();
         managerPageController.setService(server);
 
+        FXMLLoader loaderSpectacolPage = new FXMLLoader(
+                StartRpcClientFX.class.getResource("/spectacolPage.fxml"));
+        Parent rootSpectacolPage = loaderSpectacolPage.load();
+
+        SpectacolController spectacolController =
+                loaderSpectacolPage.<SpectacolController>getController();
+        spectacolController.setSrv(server);
+
 
         firstPgCtrl.setLogInParent(rootLogInPage);
         firstPgCtrl.fillComboBoxGenuri();
         firstPgCtrl.fillTableSpectacole();
         firstPgCtrl.setManagerPageController(managerPageController);
+        firstPgCtrl.setSpectacolController(spectacolController);
+        firstPgCtrl.setSpectacolParent(rootSpectacolPage);
 
         logInCtrl.setManagerPageController(managerPageController);
         logInCtrl.setFirstPageController(firstPgCtrl);

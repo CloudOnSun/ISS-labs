@@ -20,9 +20,9 @@
       <TextField fx:id="regizorField" layoutX="128.0" layoutY="113.0" />
       <TextField fx:id="genField" layoutX="131.0" layoutY="317.0" />
       <Button fx:id="butonAdauga" layoutX="410.0" layoutY="66.0" mnemonicParsing="false" onAction="#onClickAdaugaSpectacol" text="Adauga spectacol" />
-      <Button fx:id="butonSterge" layoutX="411.0" layoutY="113.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="110.0" text="Sterge spectacol" />
-      <Button fx:id="butonUpdate" layoutX="411.0" layoutY="156.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="110.0" text="Update spectacol" />
-      <TextField layoutX="128.0" layoutY="52.0" />
+      <Button fx:id="butonSterge" layoutX="411.0" layoutY="113.0" mnemonicParsing="false" onAction="#onStergeSpectacol" prefHeight="26.0" prefWidth="110.0" text="Sterge spectacol" />
+      <Button fx:id="butonUpdate" layoutX="411.0" layoutY="156.0" mnemonicParsing="false" onAction="#onUpdateSpectacol" prefHeight="26.0" prefWidth="110.0" text="Update spectacol" />
+      <TextField fx:id="idField" layoutX="128.0" layoutY="52.0" />
       <TextField fx:id="ziField" layoutX="128.0" layoutY="147.0" />
       <TextField fx:id="lunaField" layoutX="128.0" layoutY="177.0" />
       <TextField fx:id="anField" layoutX="129.0" layoutY="211.0" />

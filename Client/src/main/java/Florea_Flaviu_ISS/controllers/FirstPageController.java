@@ -24,6 +24,10 @@ import java.util.List;
 
 public class FirstPageController implements IServiceObserver {
     @FXML
+    private TextField codRezervareField;
+    @FXML
+    private Button butonStergeRez;
+    @FXML
     private TableView spectacoleTable;
     @FXML
     private TableColumn titlu;
@@ -49,6 +53,8 @@ public class FirstPageController implements IServiceObserver {
     private ComboBox genFiltru;
 
     private  Manager manager = null;
+    private SpectacolController spectacolController;
+    private Parent rootSpectacolPage;
 
     public Manager getManager() {
         return manager;
@@ -171,5 +177,59 @@ public class FirstPageController implements IServiceObserver {
         if (manager != null) {
             managerPageController.logOut();
         }
+    }
+
+    public void setSpectacolController(SpectacolController spectacolController) {
+        this.spectacolController = spectacolController;
+    }
+
+    public void onRezerva(ActionEvent actionEvent) {
+        SpectacolDTOTableView selectedSpec = (SpectacolDTOTableView) spectacoleTable.getSelectionModel().getSelectedItem();
+        try {
+            var spectacole = srv.findAllSpectacole(this);
+            Spectacol spectacol = null;
+            for (var s : spectacole) {
+                if (s.getId() == selectedSpec.getId()) {
+                    spectacol = s;
+                    break;
+                }
+            }
+
+            spectacolController.setSpectacol(spectacol);
+            Stage stage = new Stage();
+            stage.setTitle(spectacol.getTitlu());
+            stage.setScene(new Scene(rootSpectacolPage));
+            stage.show();
+            spectacolController.initializeaza();
+        } catch (TeatruException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public void setSpectacolParent(Parent rootSpectacolPage) {
+        this.rootSpectacolPage = rootSpectacolPage;
+    }
+
+    public void onStergeRezervare(ActionEvent actionEvent) {
+        try {
+            Integer cod = Integer.parseInt(codRezervareField.getText());
+
+            try {
+                srv.deleteRezervare(cod, this);
+                Alert alert = new Alert(Alert.AlertType.NONE, "A-ti anulat rezervarea", ButtonType.OK);
+                alert.setTitle("INFO");
+                alert.show();
+            } catch (TeatruException ex) {
+                Alert alert = new Alert(Alert.AlertType.NONE, ex.getMessage(), ButtonType.OK);
+                alert.setTitle("ERROR");
+                alert.show();
+            }
+        } catch (NumberFormatException ex) {
+            Alert alert = new Alert(Alert.AlertType.NONE, "NU da string pentru int", ButtonType.OK);
+            alert.setTitle("ERROR");
+            alert.show();
+        }
+
     }
 }

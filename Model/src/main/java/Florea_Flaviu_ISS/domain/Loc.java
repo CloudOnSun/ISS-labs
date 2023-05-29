@@ -21,7 +21,7 @@ public class Loc extends Florea_Flaviu_ISS.domain.Entity<Integer> implements Ser
     public Integer loc;
 
     @ManyToOne
-    @JoinColumn(name = "rezervare", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "rezervare", referencedColumnName = "id")
     public Rezervare rezervare;
 
     @ManyToOne
